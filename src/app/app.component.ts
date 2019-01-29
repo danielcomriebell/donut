@@ -13,7 +13,6 @@ import { Task } from './task';
 export class AppComponent implements OnInit {
   tasks: Task[];
   edit_state:boolean = false;
-  taskEdit: Task;
   num_var:number;
   overlay:boolean = false;
   eTask: Task = {
