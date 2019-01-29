@@ -14,8 +14,8 @@ export class AppComponent implements OnInit {
   tasks: Task[];
   edit_state:boolean = false;
   taskEdit: Task;
+  num_var:number;
   overlay:boolean = false;
-  edit_overlay:boolean = false;
   eTask: Task = {
     title: '',
     description:'',
@@ -78,14 +78,24 @@ export class AppComponent implements OnInit {
     this.ts.update(task);
   }
 
-  toggleOverlay(){
+  toggleOverlay(num){
+    if(num !== undefined){
+      this.num_var = num;
+    } else{
+      this.num_var = null;
+    }
     this.clearTaskObject();
     this.overlay = !this.overlay;
   }
 
   onSubmit(){
     if(this.task.title != '' && this.task.due_on != ''){
-      this.task.category = 'progress';
+      if(this.num_var == 1){
+        this.task.category = 'backlog';
+      } else if( this.num_var == 2){
+        this.task.category = 'progress';
+      }
+      this.num_var = null;
       this.ts.add(this.task);
       this.clearTaskObject();
       this.overlay = !this.overlay;
