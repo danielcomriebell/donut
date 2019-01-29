@@ -1,0 +1,166 @@
+@import './sass/_mixins.scss';
+@import './sass/_variables.scss';
+
+
+.cards-container{
+  top: 20px;
+  overflow: hidden;
+  width: 80%;
+  position: relative;
+  @include flex-row();
+  @include center-horizontally();
+  .card{
+    border-radius: $main-card-border-radius;
+    padding: 15px;
+    background-color: #fff;
+    flex: 1;
+    margin-right: 20px;
+    min-height: 200px;
+    .card-headline{
+      font-weight: bold;
+      text-transform: capitalize;
+      font-size: 13px;
+    }
+    &:nth-child(3){
+      margin-right: 0px;
+    }
+    .task{
+      border: 1px solid #E9E9F0;
+      display: block;
+      height: auto;
+      width: 100%;
+      position: relative;
+      margin-top: 20px;
+      @include center-horizontally();
+      .task-text-container{
+        padding: 10px;
+        .task-title{
+          font-weight: bold;
+          margin-bottom: 6px;
+        }
+        .task-description{
+          margin-bottom: 6px;
+
+        }
+        .task-due_on{
+          margin-bottom: 4px;
+
+        }
+      }
+      .start-task-button{
+        width: 100%;
+        background-color: $blue-cta;
+        @include task-cta();
+      }
+      .undo-task-button{
+        width: 100%;
+        background-color: $light-blue-cta;
+        @include task-cta();
+      }
+
+      .backlog-task-button{
+        width: 50%;
+        background-color: $light-blue-cta;
+        @include task-cta();
+      }
+      .complete-task-button{
+        width: 50%;
+        background-color: $light-green-cta;
+        @include task-cta();
+      }
+    }
+  }
+}
+
+.add-overlay-container{
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, .7);
+  position: fixed;
+  z-index: 1;
+  .overlay-content{
+    background-color: white;
+    padding: 30px;
+    z-index: 10;
+    width: 400px;
+    height: 215px;
+    position: relative;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    @include center-content();
+    .overlay-headline{
+      font-family: 'Helvetica';
+      font-weight: bold;
+      text-transform: capitalize;
+      font-size: 13px;
+    }
+    .overlay-form{
+      position: relative;
+      top: 15px;
+      .description-input{
+        height: 40px;
+      }
+    }
+    .delete-button{
+      border: none;
+      -webkit-appearance: none;
+      outline: none;
+      background-color: red;
+      height: 30px;
+      width: 60px;
+      color: white;
+      border-radius: 5px;
+    }
+    .button-area{
+      position: relative;
+      float: right;
+      right: -10px;
+      .cancel-button{
+        border: none;
+        -webkit-appearance: none;
+        outline: none;
+        color: blue;
+        cursor: pointer;
+      }
+      .submit-button{
+        border: none;
+        -webkit-appearance: none;
+        outline: none;
+        background-color: blue;
+        height: 30px;
+        width: 60px;
+        color: white;
+        border-radius: 5px;
+        &:disabled{
+          background-color: #C0A8FF !important;
+        }
+      }
+    }
+    input, textarea{
+      display: block;
+      outline: 0;
+      height: 20px;
+      width: 100%;
+      border-radius: 4px;
+      -webkit-appearance: none;
+      margin-bottom: 10px;
+      border: 1px solid #e6e6e6;
+      padding: 5px;
+    }
+  }
+}
+
+
+.create-task-button{
+  margin-top: 20px;
+  button{
+    -webkit-appearance: none;
+    border: 1px solid #E9E9F0;
+    color: #7E51FF;
+    border-radius: 4px;
+    width: 100%;
+    outline: 0;
+    height: 30px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
+  }
+}

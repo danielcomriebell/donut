@@ -1,20 +1,90 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<div *ngIf="overlay" class="add-overlay">
+  <div class="add-overlay-container">
+    <div class="overlay-content">
+      <h1 class="overlay-headline">Create New Task</h1>
+      <form class="overlay-form" (ngSubmit)="onSubmit()">
+        <input type="text" placeholder="Title" [(ngModel)]="task.title" name="title" required>
+        <textarea class="description-input" type="textarea" placeholder="Description (Optional)" [(ngModel)]="task.description" name="description"></textarea>
+        <input type="text" placeholder="Due On" [(ngModel)]="task.due_on" name="due_on" required>
+        <div class="button-area">
+          <button class="cancel-button" (click)="toggleOverlay()" type="button" name="button">Cancel</button>
+          <button [disabled]="task.title == '' || task.due_on ==''" class="submit-button" type="submit" value="Submit">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 
+<div *ngIf="edit_state" class="add-overlay">
+  <div class="add-overlay-container">
+    <div class="overlay-content">
+      <h1 class="overlay-headline">Edit Task</h1>
+      <div>
+        <form class="overlay-form" (ngSubmit)="updateTask(eTask)">
+          <input type="text" placeholder="Add Title" [(ngModel)]="eTask.title" name="title" required>
+          <input type="text" placeholder="Add Description" [(ngModel)]="eTask.description" name="description">
+          <input type="text" placeholder="Due On" [(ngModel)]="eTask.due_on" name="due_on" required>
+          <button (click)="delete($event, eTask)" class="delete-button">Delete</button>
+          <div class="button-area">
+            <button class="cancel-button" (click)="clearState()" type="button" name="button">Cancel</button>
+            <button [disabled]="eTask.title == '' || eTask.due_on ==''" class="submit-button" type="submit" value="Submit">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="cards-container">
+  <div class="card">
+    <h1 class="card-headline">Backlog</h1>
+    <div *ngFor="let task of tasks">
+      <div (click)="editTask($event, task)" class="task" *ngIf="task.category == 'backlog'">
+        <div class="task-text-container">
+          <p class="task-title">{{task.title}}</p>
+          <p class="task-description">{{task.description}}</p>
+          <p class="task-due_on">Due: {{task.due_on}}</p>
+        </div>
+        <button class="start-task-button" (click)="updateStatusToProgress(task)" type="button" name="button">Start</button>
+      </div>
+    </div>
+    <div class="create-task-button">
+      <button (click)="toggleOverlay()" type="button" name="button">Create Task</button>
+    </div>
+  </div>
+
+
+  <div class="card">
+    <h1 class="card-headline">In Progress</h1>
+    <div *ngFor="let task of tasks">
+      <div (click)="editTask($event, task)" class="task" *ngIf="task.category == 'progress'">
+        <div class="task-text-container">
+          <p class="task-title">{{task.title}}</p>
+          <p class="task-description">{{task.description}}</p>
+          <p class="task-due_on">Due: {{task.due_on}}</p>
+        </div>
+        <button class="backlog-task-button" (click)="updateStatusToBacklog(task)" type="button" name="button">Backlog</button>
+        <button class="complete-task-button" (click)="updateStatusToComplete(task)" type="button" name="button">Complete</button>
+      </div>
+    </div>
+    <div class="create-task-button">
+      <button (click)="toggleOverlay()" type="button" name="button">Create Task</button>
+    </div>
+  </div>
+
+
+  <div class="card">
+    <h1 class="card-headline">Completed</h1>
+    <div *ngFor="let task of tasks">
+      <div class="task" *ngIf="task.category == 'complete'">
+        <div class="task-text-container">
+          <p class="task-title"><i>{{task.title}}</i></p>
+          <p class="task-description"><i>{{task.description}}</i></p>
+          <p class="task-due_on"><i>Completed: {{task.date_complete | date: 'MM/dd/yyyy'}}</i></p>
+        </div>
+        <button class="undo-task-button" (click)="updateStatusToProgress(task)" type="button" name="button">Undo</button>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,60 @@
+$break-phone: 767px;
+$break-phone-landscape: 767px;
+$break-tablet: 1022px;
+$break-laptop-small: 1280px;
+$break-laptop-medium: 1440px;
+$break-laptop-large: 1920px;
+$break-desktop: 50000px;
+
+@mixin respond-to($media) {
+  @if $media == desktop {
+    @media only screen and (min-width: $break-laptop-large + 1) and (max-width: $break-desktop) { @content; }
+  }
+  @else if $media == laptop-large {
+    @media only screen and (min-width: $break-laptop-medium + 1) and (max-width: $break-laptop-large) { @content; }
+  }
+  @else if $media == laptop-medium {
+    @media only screen and (min-width: $break-laptop-small + 1) and (max-width: $break-laptop-medium) { @content; }
+  }
+  @else if $media == laptop-small {
+    @media only screen and (min-width: $break-tablet + 1) and (max-width: $break-laptop-small) { @content; }
+  }
+  @else if $media == tablet {
+    @media only screen and (min-width: $break-phone + 1) and (max-width: $break-tablet) { @content; }
+  }
+  @else if $media == phone {
+    @media only screen and (min-width: 0px) and (max-width: $break-phone) { @content; }
+  }
+}
+
+@mixin task-cta(){
+  border: none;
+  color: white;
+  height: 30px;
+  position: relative;
+  top: 1px;
+  outline: 0;
+}
+
+@mixin flex-row(){
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  flex-direction: row;
+}
+
+@mixin center-horizontally(){
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@mixin center-content(){
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin center-vertically(){
+  top: 50%;
+  transform: translateY(-50%);
+}
